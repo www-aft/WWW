@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="zh">
+<!DOCTYPE html><html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>图片</title>
-
-<style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>图片</title><style>
+*{box-sizing:border-box}
 body{
   margin:0;
   background:#0f172a;
@@ -12,28 +11,69 @@ body{
   font-family:Arial
 }
 
+/* 📦 Giới hạn chiều rộng đẹp trên PC */
+.container{
+  max-width:1200px;
+  margin:auto;
+}
+
+h3{
+  text-align:center;
+  padding:12px;
+  margin:0;
+}
+
 .gallery{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
   gap:10px;
-  padding:10px
+  padding:10px;
+}
+
+/* 📱 Mobile */
+@media (max-width:600px){
+  .gallery{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+/* 💻 Tablet */
+@media (min-width:601px) and (max-width:899px){
+  .gallery{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+/* 🖥 PC */
+@media (min-width:900px){
+  .gallery{
+    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  }
 }
 
 .item{
   background:#1e293b;
   padding:8px;
-  border-radius:10px
+  border-radius:10px;
+  transition:0.2s;
 }
 
+.item:hover{
+  transform:scale(1.03);
+}
+
+/* ✅ Ảnh luôn đẹp mọi màn hình */
 img{
   width:100%;
+  aspect-ratio:1/1;
+  object-fit:cover;
   border-radius:8px
 }
 
 .actions{
   display:flex;
   gap:5px;
-  margin-top:5px
+  margin-top:6px
 }
 
 button,a{
@@ -57,21 +97,9 @@ button,a{
   color:#94a3b8;
   margin:10px
 }
-</style>
-</head>
-
-<body>
-
-<h3 style="text-align:center;">🖼 图片 (túpiàn)</h3>
-
-<div class="gallery" id="gallery"></div>
-
-<div class="footer">
+</style></head><body><div class="container"><h3>🖼 图片 (túpiàn)</h3><div class="gallery" id="gallery"></div><div class="footer">
 20/3/2026 • @ 2026 ©
-</div>
-
-<script>
-// ✅ Tự tạo danh sách ảnh (không cần viết tay)
+</div></div><script>
 const images = Array.from({length:26}, (_,i)=>`images/${i+1}.jpg`);
 
 const gallery = document.getElementById("gallery");
@@ -80,7 +108,6 @@ images.forEach(src=>{
   const div = document.createElement("div");
   div.className = "item";
 
-  // ✅ Có alt + xử lý lỗi ảnh
   div.innerHTML = `
     <img src="${src}" alt="image"
     onerror="this.src='https://via.placeholder.com/150?text=Error'">
@@ -89,13 +116,11 @@ images.forEach(src=>{
   const actions = document.createElement("div");
   actions.className = "actions";
 
-  // 🔥 Xem ảnh
   const view = document.createElement("button");
   view.className = "view";
   view.innerText = "查看";
   view.onclick = ()=> window.open(src, "_blank");
 
-  // 🔥 Tải ảnh (fix cho GitHub)
   const download = document.createElement("a");
   download.className = "download";
   download.innerText = "下载";
@@ -109,6 +134,5 @@ images.forEach(src=>{
   gallery.appendChild(div);
 });
 </script>
-
 </body>
 </html>
