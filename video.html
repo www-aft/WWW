@@ -1,60 +1,149 @@
-<!-- ================= video.html ================= -->
 <!DOCTYPE html>
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>视频</title>
+
 <style>
-body{margin:0;background:#0f172a;color:#fff;font-family:Arial}
-.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;padding:10px}
-.item{background:#1e293b;padding:8px;border-radius:10px}
-video{width:100%;border-radius:8px}
-.actions{display:flex;gap:5px;margin-top:5px}
-button,a{flex:1;padding:5px;border:none;border-radius:6px;color:white;text-align:center;text-decoration:none;font-size:12px}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#0f172a;
+  color:#fff;
+  font-family:Arial;
+  scroll-behavior:smooth;
+}
+
+/* 🌈 Viền cầu vồng */
+.item{
+  background:#1e293b;
+  padding:8px;
+  border-radius:12px;
+  position:relative;
+  overflow:hidden;
+}
+
+.item::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:14px;
+  background:linear-gradient(45deg,red,orange,yellow,green,cyan,blue,purple);
+  z-index:-1;
+  animation:rainbow 4s linear infinite;
+}
+
+@keyframes rainbow{
+  0%{filter:hue-rotate(0deg)}
+  100%{filter:hue-rotate(360deg)}
+}
+
+/* layout */
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:10px;
+  padding:10px
+}
+
+@media (max-width:600px){
+  .gallery{grid-template-columns:repeat(2,1fr);}
+}
+
+video{
+  width:100%;
+  border-radius:10px;
+}
+
+/* nút */
+.actions{
+  display:flex;
+  gap:5px;
+  margin-top:6px
+}
+
+button,a{
+  flex:1;
+  padding:6px;
+  border:none;
+  border-radius:8px;
+  color:white;
+  text-align:center;
+  text-decoration:none;
+  font-size:12px;
+  cursor:pointer
+}
+
 .view{background:#22c55e}
 .download{background:#3b82f6}
-.footer{text-align:center;font-size:12px;color:#94a3b8;margin:10px}
+
+h3{
+  text-align:center;
+  padding:10px;
+  margin:0;
+}
+
+.footer{
+  text-align:center;
+  font-size:12px;
+  color:#94a3b8;
+  margin:10px
+}
 </style>
 </head>
+
 <body>
 
-<h3 style="text-align:center;">🎬 视频 (shìpín)</h3>
+<h3>🎬 视频 (shìpín)</h3>
 
 <div class="gallery" id="gallery"></div>
 
-<div class="footer">20/3/2026 • @ 2026 ©</div>
+<div class="footer">
+20/3/2026 • @ 2026 ©
+</div>
 
 <script>
-const videos = [
-  "videos/video1.mp4",
-  "videos/video2.mp4"
-];
+// ✅ hỗ trợ tên có dấu cách: video 1.mp4
+const videos = Array.from({length:10}, (_,i)=>
+  `videos/video%20${i+1}.mp4`
+);
 
 const gallery = document.getElementById("gallery");
 
 videos.forEach(src=>{
-  const div=document.createElement("div");
-  div.className="item";
+  const div = document.createElement("div");
+  div.className = "item";
 
-  div.innerHTML=`<video src="${src}" controls></video>`;
+  const video = document.createElement("video");
+  video.src = src;
+  video.controls = true;
 
-  const actions=document.createElement("div");
-  actions.className="actions";
+  // ❗ lỗi video
+  video.onerror = ()=>{
+    video.outerHTML = `<div style="text-align:center;color:red">❌ 无视频</div>`;
+  };
 
-  const view=document.createElement("button");
-  view.className="view";
-  view.innerText="查看";
-  view.onclick=()=>window.open(src);
+  const actions = document.createElement("div");
+  actions.className = "actions";
 
-  const download=document.createElement("a");
-  download.className="download";
-  download.innerText="下载";
-  download.href=src;
-  download.download="";
+  // 查看
+  const view = document.createElement("button");
+  view.className = "view";
+  view.innerText = "查看";
+  view.onclick = ()=> window.open(src);
+
+  // 下载
+  const download = document.createElement("a");
+  download.className = "download";
+  download.innerText = "下载";
+  download.href = src;
+  download.download = "";
 
   actions.appendChild(view);
   actions.appendChild(download);
 
+  div.appendChild(video);
   div.appendChild(actions);
   gallery.appendChild(div);
 });
