@@ -1,8 +1,11 @@
-<!DOCTYPE html><html lang="zh">
+<!DOCTYPE html>
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>图片</title><style>
+<title>图片</title>
+
+<style>
 *{box-sizing:border-box}
 body{
   margin:0;
@@ -10,72 +13,40 @@ body{
   color:#fff;
   font-family:Arial
 }
-
-/* 📦 Giới hạn chiều rộng đẹp trên PC */
 .container{
   max-width:1200px;
   margin:auto;
 }
-
 h3{
   text-align:center;
   padding:12px;
   margin:0;
 }
-
 .gallery{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
   gap:10px;
   padding:10px;
 }
-
-/* 📱 Mobile */
 @media (max-width:600px){
-  .gallery{
-    grid-template-columns:repeat(2,1fr);
-  }
+  .gallery{grid-template-columns:repeat(2,1fr);}
 }
-
-/* 💻 Tablet */
-@media (min-width:601px) and (max-width:899px){
-  .gallery{
-    grid-template-columns:repeat(3,1fr);
-  }
-}
-
-/* 🖥 PC */
-@media (min-width:900px){
-  .gallery{
-    grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-  }
-}
-
 .item{
   background:#1e293b;
   padding:8px;
   border-radius:10px;
-  transition:0.2s;
 }
-
-.item:hover{
-  transform:scale(1.03);
-}
-
-/* ✅ Ảnh luôn đẹp mọi màn hình */
 img{
   width:100%;
   aspect-ratio:1/1;
   object-fit:cover;
   border-radius:8px
 }
-
 .actions{
   display:flex;
   gap:5px;
   margin-top:6px
 }
-
 button,a{
   flex:1;
   padding:6px;
@@ -87,19 +58,31 @@ button,a{
   font-size:12px;
   cursor:pointer
 }
-
 .view{background:#22c55e}
 .download{background:#3b82f6}
-
 .footer{
   text-align:center;
   font-size:12px;
   color:#94a3b8;
   margin:10px
 }
-</style></head><body><div class="container"><h3>🖼 图片 (túpiàn)</h3><div class="gallery" id="gallery"></div><div class="footer">
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h3>🖼 图片 (túpiàn)</h3>
+
+<div class="gallery" id="gallery"></div>
+
+<div class="footer">
 20/3/2026 • @ 2026 ©
-</div></div><script>
+</div>
+</div>
+
+<script>
+// 🔥 QUAN TRỌNG: đúng tên file ảnh
 const images = Array.from({length:26}, (_,i)=>`images/${i+1}.jpg`);
 
 const gallery = document.getElementById("gallery");
@@ -108,10 +91,12 @@ images.forEach(src=>{
   const div = document.createElement("div");
   div.className = "item";
 
-  div.innerHTML = `
-    <img src="${src}" alt="image"
-    onerror="this.src='https://via.placeholder.com/150?text=Error'">
-  `;
+  const img = document.createElement("img");
+  img.src = src;
+
+  img.onerror = ()=>{
+    img.src = "https://via.placeholder.com/150?text=No+Image";
+  };
 
   const actions = document.createElement("div");
   actions.className = "actions";
@@ -119,20 +104,22 @@ images.forEach(src=>{
   const view = document.createElement("button");
   view.className = "view";
   view.innerText = "查看";
-  view.onclick = ()=> window.open(src, "_blank");
+  view.onclick = ()=> window.open(src);
 
   const download = document.createElement("a");
   download.className = "download";
   download.innerText = "下载";
   download.href = src;
-  download.setAttribute("download", `image_${Date.now()}.jpg`);
+  download.download = "";
 
   actions.appendChild(view);
   actions.appendChild(download);
 
+  div.appendChild(img);
   div.appendChild(actions);
   gallery.appendChild(div);
 });
 </script>
+
 </body>
 </html>
